@@ -7,13 +7,13 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Your Name / Site Title"
+title                    : "Edin Guso's Personal Webpage"
 title_separator          : "-"
-name                     : &name "Your Name"
-description              : &description "personal description"
-url                      : https://academicpages.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+name                     : &name "Edin Guso"
+description              : &description "Computer Science MSc. student at EPFL" 
+url                      : https://edinguso.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
-repository               : "academicpages/academicpages.github.io"
+repository               : "edinguso/edinguso.github.io"
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
@@ -81,7 +81,7 @@ analytics:
 # Site Author
 author:
   name             : "Edin Guso"
-  avatar           : "profile.png" #TODO
+  avatar           : "profile.jpg"
   bio              : "Computer Science MSc. student at EPFL"
   location         : "Lausanne, Switzerland"
   employer         :
@@ -173,19 +173,19 @@ kramdown:
   enable_coderay: false
 
 
-# Collections #TODO
+# Collections
 collections:
   teaching:
-    output: false
+    output: true
     permalink: /:collection/:path/
   publications:
-    output: false
+    output: true
     permalink: /:collection/:path/
   portfolio:
     output: true
     permalink: /:collection/:path/
   talks:
-    output: false
+    output: true
     permalink: /:collection/:path/
 
 
