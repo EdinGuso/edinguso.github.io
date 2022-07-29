@@ -1,5 +1,8 @@
 # main links links
 main:
+  - title: "CV"
+    url: /files/edinguso_cv.pdf
+
   #- title: "Publications"
   #  url: /publications/
 
@@ -14,9 +17,6 @@ main:
         
   #- title: "Blog Posts"
   #  url: /year-archive/
-    
-  - title: "CV"
-    url: /files/edinguso_cv_20210920.pdf
     
   #- title: "Guide"
   #  url: /markdown/
