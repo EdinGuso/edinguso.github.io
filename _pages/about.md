@@ -8,8 +8,8 @@ redirect_from:
   - /about.html
 ---
 
-Hi! I am Edin Guso. I am a second year Computer Science MSc. student at [EPFL](https://www.epfl.ch/en/). I am doing my specialization in Computer Science Theory.
+Hi! I am Edin Guso. I am a Computer Science MSc. student at [EPFL](https://www.epfl.ch/en/). I am doing my internship at [Logmind](https://www.logmind.com/) as a Junior Data Scientist.
 
 I received a BSc. in Computer Science and BSc. in Mechatronics Engineering (double major) from [Sabanci University](https://www.sabanciuniv.edu/en/) in 2021.
 
-Broadly, I am interested in theoretical computer science and algorithm design. I am looking forward to research opportunities in related fields.
+I am interested in a variety of topics, such as distributed algorithms, graph algorithms, and working with LLMs. I am looking for thesis opportunities starting in February/March 2024.

@@ -1,11 +1,9 @@
 ---
-title: "Motion Control of a Flying Robot (Quadrotor)"
-excerpt: "I designed a robust controller for hovering and trajectory-tracking of a quadrotor in MATLAB and tested the controller’s ability to perform several different tasks (trajectories) in Simulink.\n\n
-
-In order to access the report, click [here](https://github.com/EdinGuso/ME425-Autonomous-Mobile-Robotics/blob/main/Homework2_Report.pdf)"
+title: "Computer Networks Term Project"
+excerpt: "We developed a file transfer client and server application in C#. The client can upload and download files, make the files public or private, make copies on the server, request a list of all files and access other people's public files. Server can handle multiple client connections at a time. We extensively used the Socket and Threading libraries."
 collection: portfolio
 ---
 
-I designed a robust controller for hovering and trajectory-tracking of a quadrotor in MATLAB and tested the controller’s ability to perform several different tasks (trajectories) in Simulink.
+We developed a file transfer client and server application in C#. The client can upload and download files, make the files public or private, make copies on the server, request a list of all files and access other people's public files. Server can handle multiple client connections at a time. We extensively used the Socket and Threading libraries.
 
-In order to access the report, click [here](https://github.com/EdinGuso/ME425-Autonomous-Mobile-Robotics/blob/main/Homework2_Report.pdf)
+In order to access the github repo, click [here](https://github.com/EdinGuso/CS408-Computer-Networks)
