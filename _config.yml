@@ -10,7 +10,7 @@ locale                   : "en-US"
 title                    : "Edin Guso's Personal Webpage"
 title_separator          : "-"
 name                     : &name "Edin Guso"
-description              : &description "Computer Science MSc. student at EPFL" 
+description              : &description "MSc. in Computer Science from EPFL" 
 url                      : https://edinguso.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "edinguso/edinguso.github.io"
@@ -82,7 +82,7 @@ analytics:
 author:
   name             : "Edin Guso"
   avatar           : "profile.jpg"
-  bio              : "Computer Science MSc. student at EPFL"
+  bio              : "MSc. in Computer Science from EPFL"
   location         : "Lausanne, Switzerland"
   employer         :
   pubmed           :
