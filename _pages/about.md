@@ -8,8 +8,16 @@ redirect_from:
   - /about.html
 ---
 
-Hi! I'm Edin Guso, a recent graduate with an MSc in Computer Science from [EPFL](https://www.epfl.ch/en/). I completed my Master’s thesis at [Logmind](https://www.logmind.com/), where I worked as an AI Engineer, focusing on cutting-edge AI solutions to improve platform performance and user experience.
+Hi! My name is Edin Guso. I am actively seeking full-time job opportunities in Switzerland, where I can continue to grow as an engineer and contribute to exciting new ventures.
 
-I hold a double BSc in Computer Science and Mechatronics Engineering from [Sabanci University](https://www.sabanciuniv.edu/en/), which has given me a well-rounded approach to complex technical challenges. My areas of expertise include AI Engineering, Distributed Algorithms, Software Engineering, and Graph Algorithms, and I am passionate about leveraging these skills to create innovative and impactful projects.
+I am a recent graduate with an MSc in Computer Science from EPFL. I completed my Master’s thesis at Logmind, where I worked as an AI Engineer, focusing on cutting-edge AI solutions to improve platform performance and user experience.
 
-Currently, I am actively seeking full-time job opportunities in Switzerland, where I can continue to grow as an engineer and contribute to exciting new ventures. In my free time, I enjoy working on personal coding projects and staying updated with the latest technologies.
+I hold a double BSc in Computer Science and Mechatronics Engineering from Sabanci University, which has given me a well-rounded approach to complex technical challenges. My areas of expertise include AI Engineering, Distributed Algorithms, Software Engineering, and Graph Algorithms, and I am passionate about leveraging these skills to create innovative and impactful projects.
+
+In my free time, I enjoy working on personal coding projects and staying updated with the latest technologies.
+
+
+
+
+
+
