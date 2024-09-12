@@ -15,9 +15,3 @@ I am a recent graduate with an MSc in Computer Science from EPFL. I completed my
 I hold a double BSc in Computer Science and Mechatronics Engineering from Sabanci University, which has given me a well-rounded approach to complex technical challenges. My areas of expertise include AI Engineering, Distributed Algorithms, Software Engineering, and Graph Algorithms, and I am passionate about leveraging these skills to create innovative and impactful projects.
 
 In my free time, I enjoy working on personal coding projects and staying updated with the latest technologies.
-
-
-
-
-
-
