@@ -1,9 +1,9 @@
 ---
-title: "Computer Networks Term Project"
-excerpt: "We developed a file transfer client and server application in C#. The client can upload and download files, make the files public or private, make copies on the server, request a list of all files and access other people's public files. Server can handle multiple client connections at a time. We extensively used the Socket and Threading libraries."
+title: "Tolerant Max Cut Tester"
+excerpt: "We present a sublinear-time algorithm for testing whether a bounded degree expander graph has a max-cut value close to 1 or far from 1. Graphs are represented by incidence lists of bounded length d, and the testing algorithm can perform queries of the form: “who is the i-th neighbor of vertex v”. The tester should determine with high probability whether the max-cut value is greater than 1 − ϵ1 or less than 1 − ϵ2. Our testing algorithm has query complexity and running time O(√n log2 n/ϵ1) where n is the number of graph vertices and ϵ1 is the tolerance value."
 collection: portfolio
 ---
 
-We developed a file transfer client and server application in C#. The client can upload and download files, make the files public or private, make copies on the server, request a list of all files and access other people's public files. Server can handle multiple client connections at a time. We extensively used the Socket and Threading libraries.
+**Abstract:** We present a sublinear-time algorithm for testing whether a bounded degree expander graph has a max-cut value close to 1 or far from 1. Graphs are represented by incidence lists of bounded length d, and the testing algorithm can perform queries of the form: “who is the i-th neighbor of vertex v”. The tester should determine with high probability whether the max-cut value is greater than 1 − ϵ1 or less than 1 − ϵ2. Our testing algorithm has query complexity and running time O(√n log2 n/ϵ1) where n is the number of graph vertices and ϵ1 is the tolerance value.
 
-In order to access the github repo, click [here](https://github.com/EdinGuso/CS408-Computer-Networks)
+In order to access the report, click [here](https://github.com/EdinGuso/Tolerant-Max-Cut/blob/main/edin_guso_Tolerant_Max_Cut.pdf)

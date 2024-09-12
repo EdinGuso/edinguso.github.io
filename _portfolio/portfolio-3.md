@@ -1,9 +1,9 @@
 ---
-title: "Concurrent Algorithms Term Project"
-excerpt: "Implemented software transactional memory using the TL2 algorithm in C. My implementation achieved x2.918 speed up compared to the reference solution using a single global lock, obtaining the maximum grade."
+title: "Distributed Algorithms Term Project"
+excerpt: "I implemented perfect links, uniform reliable broadcast and lattice agreement using UDP in Java. My implementation achieved 3M+ message throughput on perfect links level, obtaining the best result in the class."
 collection: portfolio
 ---
 
-**Abstract:** Implemented software transactional memory using the TL2 algorithm in C. My implementation achieved x2.918 speed up compared to the reference solution using a single global lock, obtaining the maximum grade.
+I implemented perfect links, uniform reliable broadcast and lattice agreement using UDP in Java. My implementation achieved 3M+ message throughput on perfect links level, obtaining the best result in the class.
 
-In order to access the report, click [here](https://github.com/EdinGuso/CS453-Concurrent-Algorithms)
+In order to access the github repo, click [here](https://github.com/EdinGuso/CS451-Distributed-Algorithms)

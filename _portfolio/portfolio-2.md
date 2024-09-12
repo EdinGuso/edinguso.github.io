@@ -1,9 +1,21 @@
 ---
-title: "Distributed Algorithms Term Project"
-excerpt: "I implemented perfect links, uniform reliable broadcast and lattice agreement using UDP in Java. My implementation achieved 3M+ message throughput on perfect links level, obtaining the best result in the class."
+title: "Efficient Computation of Worst-Case Delay-Bounds for Time-Sensitive Networks"
+excerpt: "Time-sensitive networks, as in the context of IEEE Time-Sensitive Networking (TSN) and IETF Deterministic Networking (DetNet), require bounds on the worst-case delays as they support safety-critical applications and offer deterministic services with guaranteed, bounded latency. Finding the exact worst-case delays is known to be an NP-hard problem; hence we are interested in bounds on the worst-case delays.\n\n
+
+In summary, our project focuses on addressing the challenges associated with the selection of cuts in the PLP algorithm for accurately estimating worst-case delay bounds. We aim to investigate and understand the intricate relationship between the size, shape, and composition of cuts, and their impact on the resulting delay bounds. By gaining insights into this relationship, we can develop more efficient and accurate heuristics for selecting good cuts for networks of varying sizes and topologies. Through these contributions, we strive to improve the reliability and efficiency of communication systems operating in time-critical environments."
 collection: portfolio
 ---
 
-**Abstract:** I implemented perfect links, uniform reliable broadcast and lattice agreement using UDP in Java. My implementation achieved 3M+ message throughput on perfect links level, obtaining the best result in the class.
+**Introduction:** Time-sensitive networks, as in the context of IEEE Time-Sensitive Networking (TSN) and IETF Deterministic Networking (DetNet), require bounds on the worst-case delays as they support safety-critical applications and offer deterministic services with guaranteed, bounded latency. Finding the exact worst-case delays is known to be an NP-hard problem; hence we are interested in bounds on the worst-case delays.
 
-In order to access the report, click [here](https://github.com/EdinGuso/CS451-Distributed-Algorithms)
+In the quest to analyze and validate the performance of communication networks, Network Calculus has emerged as a powerful mathematical framework. It provides methods for computing upper bounds on worst-case performance parameters, such as end-to-end delay and backlog. These upper bounds enable network designers to assess the predictability and performance guarantees of their designs and ensure compliance with real-time requirements.
+
+However, computing accurate upper bounds on worst-case performance in time-sensitive networks remains a complex and computationally intensive task. Existing approaches rely on heuristics to overcome the computational intractability of the problem. One notable method is the PLP algorithm, proposed in 'Trade-off between accuracy and Tractability of network calculus in FIFO networks'. The PLP algorithm leverages linear programming techniques to determine worst-case delay bounds.
+
+PLP works by breaking cyclic dependencies within the network and this is achieved by cutting the network. The selection of cuts significantly impacts the accuracy of worst-case delay bounds. Despite the algorithm's effectiveness, selecting suitable cuts for the PLP algorithm poses a significant challenge due to the exponential number of potential cuts for each network.
+
+In the original implementation of the PLP algorithm, the cut selection process follows a simplistic approach. While their approach ensures the construction of a valid forest, the resulting forest heavily relies on the indexing of the nodes (servers) within the network. Even with favorable indexing, this simple cut selection often leads to sub-optimal delay bounds, depending on the network topology.
+
+In summary, our project focuses on addressing the challenges associated with the selection of cuts in the PLP algorithm for accurately estimating worst-case delay bounds. We aim to investigate and understand the intricate relationship between the size, shape, and composition of cuts, and their impact on the resulting delay bounds. By gaining insights into this relationship, we can develop more efficient and accurate heuristics for selecting good cuts for networks of varying sizes and topologies. Through these contributions, we strive to improve the reliability and efficiency of communication systems operating in time-critical environments.
+
+In order to access the github repo, click [here](https://github.com/EdinGuso/ecowcdb)
