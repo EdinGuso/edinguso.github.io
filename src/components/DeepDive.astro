@@ -11,8 +11,9 @@ interface Props {
   body: string[];
   pending: string;
   next?: { num: string; title: string; href: string };
+  links?: { label: string; href: string }[];
 }
-const { title, description, path, back, figure, body, pending, next } = Astro.props;
+const { title, description, path, back, figure, body, pending, next, links = [] } = Astro.props;
 const paras = body.length ? body : [pending];
 ---
 <Base title={title} description={description} path={path} figures>
@@ -26,6 +27,11 @@ const paras = body.length ? body : [pending];
           <p class={`rise-dd${body.length ? '' : ' muted'}`} style={`--d:${(0.16 + i * 0.06).toFixed(2)}s`}>{p}</p>
         ))}
       </div>
+      {body.length > 0 && links.length > 0 && (
+        <ul class="dd-links rise-dd" style={`--d:${(0.16 + paras.length * 0.06).toFixed(2)}s`}>
+          {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        </ul>
+      )}
       <slot />
       <nav class="dd-nav" aria-label="Page navigation">
         <a class="dd-back nav-link" href={back}>cd ..</a>
@@ -54,6 +60,12 @@ const paras = body.length ? body : [pending];
   }
   .dd-body { display: flex; flex-direction: column; gap: 22px; font-size: 18px; line-height: 1.7; }
   .dd-body p { margin: 0; }
+  .dd-links {
+    list-style: none; margin: 32px 0 0; padding: 0;
+    display: flex; flex-wrap: wrap; gap: 8px 24px; font: 14px var(--mono);
+  }
+  .dd-links a { color: var(--fg); }
+  .dd-links a:hover { color: var(--accent); }
   .dd-nav {
     margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
     display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;

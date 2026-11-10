@@ -18,5 +18,6 @@ const { c, next } = Astro.props;
   figure={c.figure as [number, string]}
   body={c.body}
   pending={p.pending}
+  links={(c as { links?: { label: string; href: string }[] }).links}
   next={{ num: next.num, title: next.title, href: `/selected-work/${next.num}/` }}
 />

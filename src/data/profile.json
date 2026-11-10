@@ -79,7 +79,23 @@
         3,
         "a"
       ],
-      "body": []
+      "body": [
+        "Logmind's platform turns large volumes of logs into insights: the log patterns its models flag as critical. However, an insight still looks like a raw log line, so it is hard to read without knowing the system that wrote it. To look further, users then had to search individual logs with Elasticsearch queries, a language most of them did not know.",
+        "I built ModuGPT, a Python framework for LLM tools, and the three tools that shipped on it. I wrote my own instead of using LangChain or LlamaIndex, because each tool needed close control over its calls and fewer layers to debug. Every tool runs the same steps: check the input, build the prompt, call the model, then check and format the output. Prompts are put together from reusable parts such as a persona, rules, a database schema or examples, so a new tool starts from tested pieces instead of a blank prompt. When the model cannot do a task, it answers with a fixed keyword, and the tool returns a clear error instead of a wrong result.",
+        "Insight-to-Text explains an insight in plain language and suggests what to check. Users found openings like \"This log indicates that...\" robotic, so the model always starts that way and the tool removes the phrase, which also gives a simple check that the output has the expected form. Text-to-ES turns a question into an Elasticsearch query, using the index schema and examples chosen by similarity to the question. SmartSearch handles questions that mix exact filters with a topic, such as error logs from today related to network problems. It splits the question with a chain of model calls, sends the exact part through Text-to-ES and the topic through semantic search over log patterns, and combines the two. It also tells the user how it read the question.",
+        "I compared each tool with a control version on 100 examples from five kinds of logs. Where a correct answer exists, I ran the generated query and the expected one and compared the logs they return. Text-to-ES got all 100 queries right, against 13 for a plain prompt. For SmartSearch, the chain raised the score for the exact part from 0.22 to 0.67 compared with a single well-engineered call. Explanations have no single right answer, so an LLM judge from a different model scored each output in its own prompt, ten times, to limit known judge biases, and the tool won in 95 of 100 cases. The test set had no multi-level aggregations, and those are still harder.",
+        "I started with small self-hosted open models, which were too weak for query generation, while larger ones would have needed expensive cloud GPUs. We moved to the OpenAI API, and later to a cheaper model for all tools except Text-to-ES. All of Logmind's GenAI tools were built on ModuGPT and shipped to customers, and the work became my Master's thesis at EPFL. The core framework is public, with the proprietary prompts and tools removed."
+      ],
+      "links": [
+        {
+          "label": "Thesis",
+          "href": "https://github.com/EdinGuso/master-project"
+        },
+        {
+          "label": "ModuGPT core framework",
+          "href": "https://bitbucket.org/ketjuni2/modugpt_public/src/main/"
+        }
+      ]
     },
     {
       "num": "04",
