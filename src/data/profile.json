@@ -1,0 +1,156 @@
+{
+  "_note": "Public-safe export from Edin's private profile. Only items cleared for public use. Edit the profile, not this file.",
+  "name": "Edin Guso",
+  "kicker": "Edin Guso, AI engineer, Lausanne",
+  "location": "Lausanne",
+  "description": "Edin Guso, AI engineer in Lausanne. Selected work, publications and projects.",
+  "links": {
+    "site": "https://edinguso.github.io/",
+    "linkedin": "https://www.linkedin.com/in/edinguso/",
+    "github": "https://github.com/EdinGuso",
+    "cv": "/cv/public.pdf"
+  },
+  "intro": {
+    "lead": "I am an AI engineer, and for the past two years I have been building GenAI and machine learning systems that run in production.",
+    "rest": "I designed and built an LLM system that maps free text to a vocabulary of over a million medical codes, with evaluation behind every change, and I set up how my team develops with AI coding agents. Before that, I built an LLM framework and the GenAI tools that shipped on it, which became my Master's thesis at EPFL."
+  },
+  "howIBuild": {
+    "title": "How I work with AI coding agents",
+    "line": "Notes on how I use AI coding agents day to day: what works, what does not, and the habits that keep the code mine.",
+    "trace": [
+      "> why did recall drop in the last eval run?",
+      "  Read config/matching.yml",
+      "  Search \"threshold\" in src/",
+      "  Run tests/eval",
+      "  The new threshold drops valid matches. Revert it and rerun?"
+    ],
+    "body": [],
+    "evidence": [
+      {
+        "text": "Case study 02: Setting up a team to develop with AI coding agents",
+        "label": "Read",
+        "href": "/selected-work/02/"
+      },
+      {
+        "text": "Gamified calisthenics workout app, built entirely with Claude Code",
+        "label": "GitHub",
+        "href": "https://github.com/EdinGuso/calisthenics-workouts"
+      },
+      {
+        "text": "\"First Steps with AI Tools\", talk for teachers",
+        "label": "Slides",
+        "href": "https://github.com/EdinGuso/First-Steps-with-AI-Tools"
+      }
+    ]
+  },
+  "pending": "The full write-up will be added soon.",
+  "caseStudies": [
+    {
+      "num": "01",
+      "title": "Mapping free text to a million medical codes",
+      "summary": "An LLM system that drafts code lists for expert review, with evaluation behind every change.",
+      "figure": [
+        1,
+        "b"
+      ],
+      "body": [
+        "To find patients in health records, you first need to know which codes stand for a disease, a symptom or a treatment. Across the coding systems we work with there are over a million diagnosis, procedure and drug codes, and building these lists by hand was slow and hard to repeat.",
+        "I designed and built a GenAI system that drafts these code lists, so experts review a draft instead of starting from nothing. It was first used on a real programme within two months of starting, and since then I have kept improving it for several clients and disease programmes, until it became a tested part of our main platform.",
+        "At the start there was no measure of correctness, so every change was a guess. I introduced evaluation against expert-curated golden mappings, with precision and recall per concept, so that prompt and model changes could be compared on evidence. Each matching rule can be switched off, so its contribution can be measured on its own.",
+        "Scale was the other problem. The first version ran out of memory after a few thousand codes, so it could only work on small subsets. I rewrote the heavy parts so the system runs on the full set of over a million codes, and checked that in a full-scale simulation before relying on it.",
+        "When I moved the system into the platform, I gave it typed configuration, so bad settings fail at start-up, over 1,000 unit tests and an offline mode, so CI runs it end to end without paying for API calls. I also made it serve different clients and coding systems through configuration instead of separate code."
+      ]
+    },
+    {
+      "num": "02",
+      "title": "Setting up a team to develop with AI coding agents",
+      "summary": "A shared library of agent skills, so AI-written code follows team conventions from the first draft.",
+      "figure": [
+        2,
+        "a"
+      ],
+      "body": []
+    },
+    {
+      "num": "03",
+      "title": "ModuGPT and the GenAI tools for log analytics",
+      "summary": "Master's thesis. An LLM framework and three GenAI tools for searching and explaining logs, shipped to customers.",
+      "figure": [
+        3,
+        "a"
+      ],
+      "body": []
+    },
+    {
+      "num": "04",
+      "title": "Showing clinicians why a model flags a patient",
+      "summary": "Per-patient explanations and clinician review of model results, used across several client programmes.",
+      "figure": [
+        4,
+        "d"
+      ],
+      "body": []
+    }
+  ],
+  "publications": [
+    {
+      "text": "ISPOR 2026 first-author poster with Sanofi, Philadelphia, Value in Health 29(S6)",
+      "label": "Abstract",
+      "href": "https://www.ispor.org/heor-resources/presentations-database/presentation-cti/ispor-2026/poster-session-1-4/real-world-endpoint-mapping-and-identification-of-evolving-phenotypes-of-pompe-disease-using-machine-learning"
+    },
+    {
+      "text": "\"First Steps with AI Tools\", 90-minute talk for teachers, KSC AI in Education conference, Sarajevo, May 2026",
+      "label": "Slides",
+      "href": "https://github.com/EdinGuso/First-Steps-with-AI-Tools"
+    },
+    {
+      "text": "Master's thesis \"Enhancing Log Analytics with Generative AI\", EPFL with Logmind, 2024",
+      "label": "Thesis",
+      "href": "https://github.com/EdinGuso/master-project"
+    }
+  ],
+  "projects": [
+    {
+      "title": "Gamified calisthenics workout app",
+      "line": "Offline-capable PWA, built entirely with Claude Code",
+      "label": "GitHub",
+      "href": "https://github.com/EdinGuso/calisthenics-workouts"
+    },
+    {
+      "title": "Agent-run career system",
+      "line": "Generates CVs, cover letters and web text from one structured profile"
+    },
+    {
+      "title": "Discord bot for a 60+ member gaming team, 2020-2025",
+      "line": "Python. Sign-ups, reminders and monthly scores, with role-based access control on every command and button"
+    }
+  ],
+  "background": [
+    {
+      "dates": "2025-01 to now",
+      "text": "Volv Global, Applied Data Scientist"
+    },
+    {
+      "dates": "2023-08 to 2024-08",
+      "text": "Logmind, AI Engineer"
+    },
+    {
+      "dates": "2021-09 to 2024-09",
+      "text": "EPFL, M.Sc. Computer Science"
+    },
+    {
+      "dates": "2019-07 to 2019-08",
+      "text": "UT Austin, summer internship"
+    },
+    {
+      "dates": "2016-09 to 2021-06",
+      "text": "Sabancı University, B.Sc. double major, Istanbul"
+    }
+  ],
+  "outsideWork": [
+    "Calisthenics, with the workout app above",
+    "Skiing",
+    "Travelling",
+    "Led a competitive gaming team and moderated a 700+ member Discord, 2020-2025"
+  ]
+}

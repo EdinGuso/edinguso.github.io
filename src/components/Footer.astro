@@ -1,0 +1,11 @@
+---
+import profile from '../data/profile.json';
+---
+<footer class="foot">
+  <span>{profile.name}, {profile.location}</span>
+  <span class="foot-links">
+    <a href={profile.links.linkedin}>LinkedIn</a>
+    <a href={profile.links.github}>GitHub</a>
+    <a href={profile.links.cv}>CV</a>
+  </span>
+</footer>

@@ -1,0 +1,62 @@
+---
+interface Props { path?: string; home?: boolean }
+const { path = '', home = false } = Astro.props;
+---
+<header class="bar" data-home={home ? '1' : undefined}>
+  <div class="bar-inner">
+    <a class="bar-name" href="/" aria-label="Edin Guso, home">edin-guso<span class="bar-path">{path}</span></a>
+    <button class="toggle" type="button" aria-label="Switch colour theme">theme: light</button>
+  </div>
+</header>
+<script>
+  const root = document.documentElement;
+  const bar = document.querySelector<HTMLElement>('.bar')!;
+  const btn = bar.querySelector<HTMLButtonElement>('.toggle')!;
+  const pathEl = bar.querySelector<HTMLElement>('.bar-path')!;
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+
+  const current = () => root.getAttribute('data-theme') || (mq.matches ? 'dark' : 'light');
+  const label = () => { btn.textContent = 'theme: ' + current(); };
+  label();
+  // Turn transitions off for the frame in which the colours change, so nothing lags behind.
+  const instantly = (fn: () => void) => {
+    root.classList.add('theme-switching');
+    fn();
+    void getComputedStyle(root).color; // apply the new colours while transitions are off
+    root.classList.remove('theme-switching');
+  };
+  btn.addEventListener('click', () => {
+    const next = current() === 'dark' ? 'light' : 'dark';
+    instantly(() => root.setAttribute('data-theme', next));
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    label();
+  });
+  mq.addEventListener('change', () => instantly(label));
+
+  const isHome = bar.dataset.home === '1';
+  const ids = ['how-i-build', 'selected-work', 'publications-and-talks', 'personal-projects', 'background', 'outside-work'];
+  let raf = 0;
+  const update = () => {
+    raf = 0;
+    bar.classList.toggle('solid', window.scrollY > 8);
+    if (!isHome) return;
+    let sec = '';
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top < window.innerHeight * 0.35) sec = id;
+    }
+    const text = sec ? '/' + sec : '';
+    if (pathEl.textContent !== text) pathEl.textContent = text;
+  };
+  window.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
+  update();
+
+  if (isHome) {
+    bar.querySelector('.bar-name')!.addEventListener('click', (e) => {
+      e.preventDefault();
+      const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+      history.replaceState(null, '', '/');
+    });
+  }
+</script>

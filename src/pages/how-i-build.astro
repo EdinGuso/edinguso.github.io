@@ -1,0 +1,33 @@
+---
+import DeepDive from '../components/DeepDive.astro';
+import p from '../data/profile.json';
+const h = p.howIBuild;
+---
+<DeepDive
+  title={h.title}
+  description={h.line}
+  path="/how-i-build"
+  back="/#how-i-build"
+  figure={[2, 'd']}
+  body={h.body}
+  pending={p.pending}
+>
+  <section class="evidence rise-dd" style="--d:.24s">
+    <h2 class="label">/evidence</h2>
+    <div class="rows">
+      {h.evidence.map((e) =>
+        e.href && e.href.startsWith('/') ? (
+          <a class="row row-whole" href={e.href}><span>{e.text}</span><span class="row-link">{e.label}</span></a>
+        ) : e.href ? (
+          <div class="row"><span>{e.text}</span><a class="row-link" href={e.href}>{e.label}</a></div>
+        ) : (
+          <div class="row"><span>{e.text}</span></div>
+        )
+      )}
+    </div>
+  </section>
+</DeepDive>
+
+<style>
+  .evidence { margin-top: 48px; }
+</style>

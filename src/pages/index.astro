@@ -1,0 +1,154 @@
+---
+import Base from '../layouts/Base.astro';
+import Figure from '../components/Figure.astro';
+import p from '../data/profile.json';
+
+// Trace typing: prompt typed at ~0.045 s per character, tool steps and the reply a little faster.
+let t = 0.6;
+const trace = p.howIBuild.trace.map((text, i) => {
+  const n = text.trimEnd().length;
+  const dur = Math.max(0.6, n * (i === 0 ? 0.045 : 0.033));
+  const line = { text, n, dur: dur.toFixed(2), delay: t.toFixed(2), kind: i === 0 ? 'first' : i === p.howIBuild.trace.length - 1 ? 'last' : 'step' };
+  t += dur + (i === 0 ? 0.5 : 0.35);
+  return line;
+});
+---
+<Base home figures>
+  <main>
+    <h1 class="sr-only">{p.name}</h1>
+    <div class="kicker mono muted rise">{p.kicker}</div>
+    <p class="intro rise" style="--d:.06s">{p.intro.lead} <span class="muted">{p.intro.rest}</span></p>
+    <nav class="intro-links mono rise" style="--d:.12s" aria-label="Links">
+      <a class="nav-link" href={p.links.linkedin}>LinkedIn</a>
+      <a class="nav-link" href={p.links.github}>GitHub</a>
+      <a class="nav-link" href={p.links.cv}>CV</a>
+    </nav>
+
+    <section id="how-i-build" class="first rise" style="--d:.16s">
+      <h2 class="label">/how-i-build</h2>
+      <a class="card" href="/how-i-build/" aria-label={p.howIBuild.title}>
+        <span class="trace" aria-hidden="true">
+          {trace.map((l) => (
+            <span class={`tl tl-${l.kind}`} style={`animation-duration:${l.dur}s;animation-delay:${l.delay}s;animation-timing-function:steps(${l.n})`}>{l.text}</span>
+          ))}
+        </span>
+        <span class="card-foot">
+          <span class="card-text">
+            <span class="card-title">{p.howIBuild.title}</span>
+            <span class="row-sub">{p.howIBuild.line}</span>
+          </span>
+          <span class="mono muted small">Read</span>
+        </span>
+      </a>
+    </section>
+
+    <section id="selected-work" class="rise" style="--d:.2s">
+      <h2 class="label">/selected-work</h2>
+      <div class="panels">
+        {p.caseStudies.map((c) => (
+          <a class="panel" href={`/selected-work/${c.num}/`} aria-label={c.title}>
+            <span class="panel-fig"><Figure kind={c.figure[0] as number} variant={c.figure[1] as string} /></span>
+            <span class="panel-text">
+              <span class="mono muted panel-num">{c.num}</span>
+              <span class="panel-title">{c.title}</span>
+              <span class="row-sub">{c.summary}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section id="publications-and-talks" class="rise" style="--d:.28s">
+      <h2 class="label">/publications-and-talks</h2>
+      <div class="rows">
+        {p.publications.map((r) => (
+          <div class="row"><span>{r.text}</span><a class="row-link" href={r.href}>{r.label}</a></div>
+        ))}
+      </div>
+    </section>
+
+    <section id="personal-projects" class="rise" style="--d:.34s">
+      <h2 class="label">/personal-projects</h2>
+      <div class="rows">
+        {p.projects.map((r) => (
+          <div class="row">
+            <span class="row-text"><span>{r.title}</span><span class="row-sub">{r.line}</span></span>
+            {r.href ? <a class="row-link" href={r.href}>{r.label}</a> : <span class="row-private">Private</span>}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section id="background" class="rise" style="--d:.4s">
+      <h2 class="label">/background</h2>
+      <div class="bg">
+        {p.background.map((b) => (
+          <><span class="bg-date mono muted">{b.dates}</span><span>{b.text}</span></>
+        ))}
+      </div>
+    </section>
+
+    <section id="outside-work" class="rise" style="--d:.46s">
+      <h2 class="label">/outside-work</h2>
+      <div class="ow">
+        {p.outsideWork.map((o) => <span>{o}</span>)}
+      </div>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .kicker { margin-top: clamp(48px, 10vw, 96px); font-size: 13px; }
+  .intro {
+    font-size: clamp(20px, 2.6vw, 24px); line-height: 1.5; letter-spacing: -0.01em; margin: 16px 0 28px;
+  }
+  .intro-links { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; }
+  section { margin-top: 64px; }
+  section.first { margin-top: clamp(56px, 9vw, 88px); }
+  .small { font-size: 13px; }
+
+  .card {
+    display: flex; flex-direction: column; margin-top: 6px; border: 1px solid var(--line); border-radius: 12px;
+    overflow: hidden; color: var(--fg); text-decoration: none; transition: border-color 0.2s;
+  }
+  .card:hover, .card:focus-visible { border-color: var(--accent); color: var(--fg); }
+  .trace {
+    display: flex; flex-direction: column; gap: 4px; background: var(--soft); padding: 18px 20px;
+    font: 13px/1.6 var(--mono); color: var(--muted);
+  }
+  .tl { white-space: pre-wrap; animation-name: type; animation-fill-mode: both; }
+  /* Wrapped lines cannot be typed in cleanly, so on narrow screens each line fades in instead. */
+  @keyframes line-in { from { opacity: 0; } to { opacity: 1; } }
+  @media (max-width: 560px) {
+    .tl { animation-name: line-in; animation-timing-function: ease !important; animation-duration: 0.4s !important; }
+  }
+  .tl-first { color: var(--fg); }
+  .tl-last { color: var(--accent); }
+  .card-foot { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 16px 20px; }
+  .card-text { display: flex; flex-direction: column; gap: 2px; }
+  .card-title { font-weight: 500; }
+
+  .panels {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 16px; margin-top: 6px;
+  }
+  .panel {
+    display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+    color: var(--fg); text-decoration: none; transition: border-color 0.2s;
+  }
+  .panel:hover, .panel:focus-visible { border-color: var(--accent); color: var(--fg); }
+  .panel-fig { display: block; height: 168px; background: var(--soft); padding: 18px 22px; }
+  .panel-text { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px 18px; }
+  .panel-num { font-size: 12px; }
+  .panel-title { font-weight: 500; line-height: 1.35; }
+
+  .bg {
+    display: grid; grid-template-columns: auto 1fr; gap: 10px 24px; font-size: 16px;
+    padding-top: 12px; border-top: 1px solid var(--line);
+  }
+  .bg-date { font-size: 13px; padding-top: 3px; white-space: nowrap; }
+  .ow {
+    display: flex; flex-direction: column; gap: 8px; font-size: 16px;
+    padding-top: 12px; border-top: 1px solid var(--line);
+  }
+</style>

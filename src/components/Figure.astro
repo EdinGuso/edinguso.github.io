@@ -1,0 +1,7 @@
+---
+import { figure } from '../lib/figures.js';
+interface Props { kind: number; variant: string }
+const { kind, variant } = Astro.props;
+---
+<span class="fig fig-anim"><Fragment set:html={figure(kind, variant)} /></span>
+<span class="fig fig-static"><Fragment set:html={figure(kind, variant, { reduce: true })} /></span>

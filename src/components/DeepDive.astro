@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+import Figure from './Figure.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  back: string;
+  figure: [number, string];
+  body: string[];
+  pending: string;
+  next?: { num: string; title: string; href: string };
+}
+const { title, description, path, back, figure, body, pending, next } = Astro.props;
+const paras = body.length ? body : [pending];
+---
+<Base title={title} description={description} path={path} figures>
+  <main>
+    <article class="dd">
+      <a class="dd-back nav-link" href={back}>cd ..</a>
+      <h1 class="rise-dd" style="--d:.06s">{title}</h1>
+      <div class="dd-fig rise-dd" style="--d:.12s"><Figure kind={figure[0]} variant={figure[1]} /></div>
+      <div class="dd-body">
+        {paras.map((p, i) => (
+          <p class={`rise-dd${body.length ? '' : ' muted'}`} style={`--d:${(0.16 + i * 0.06).toFixed(2)}s`}>{p}</p>
+        ))}
+      </div>
+      <slot />
+      <nav class="dd-nav" aria-label="Page navigation">
+        <a class="dd-back nav-link" href={back}>cd ..</a>
+        {next && (
+          <a class="dd-next" href={next.href}>
+            <span class="dd-next-num">cd ../{next.num}</span>
+            <span>{next.title}</span>
+          </a>
+        )}
+      </nav>
+    </article>
+  </main>
+</Base>
+
+<style>
+  .dd { margin-top: clamp(40px, 8vw, 72px); }
+  .dd-back { font: 13px var(--mono); color: var(--muted); text-decoration: none; }
+  .dd-back:hover { color: var(--fg); }
+  h1 {
+    font-size: clamp(28px, 4.4vw, 40px); line-height: 1.15; letter-spacing: -0.025em; font-weight: 600;
+    margin: 40px 0 32px; text-wrap: balance;
+  }
+  .dd-fig {
+    height: clamp(160px, 30vw, 240px); border: 1px solid var(--line); border-radius: 12px;
+    background: var(--soft); padding: 20px; margin-bottom: 40px;
+  }
+  .dd-body { display: flex; flex-direction: column; gap: 22px; font-size: 18px; line-height: 1.7; }
+  .dd-body p { margin: 0; }
+  .dd-nav {
+    margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;
+  }
+  .dd-next {
+    display: flex; flex-direction: column; align-items: flex-end; text-align: right;
+    color: var(--fg); text-decoration: none; margin-left: auto;
+  }
+  .dd-next-num { font: 13px var(--mono); color: var(--muted); }
+  .dd-next:hover, .dd-next:hover .dd-next-num { color: var(--accent); }
+</style>

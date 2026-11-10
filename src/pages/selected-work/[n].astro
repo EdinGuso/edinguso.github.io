@@ -1,0 +1,22 @@
+---
+import DeepDive from '../../components/DeepDive.astro';
+import p from '../../data/profile.json';
+
+export function getStaticPaths() {
+  return p.caseStudies.map((c, i) => {
+    const next = p.caseStudies[(i + 1) % p.caseStudies.length];
+    return { params: { n: c.num }, props: { c, next } };
+  });
+}
+const { c, next } = Astro.props;
+---
+<DeepDive
+  title={c.title}
+  description={c.summary}
+  path={`/selected-work/${c.num}`}
+  back="/#selected-work"
+  figure={c.figure as [number, string]}
+  body={c.body}
+  pending={p.pending}
+  next={{ num: next.num, title: next.title, href: `/selected-work/${next.num}/` }}
+/>

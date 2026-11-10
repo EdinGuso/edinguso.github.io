@@ -1,0 +1,80 @@
+---
+import '@fontsource/geist/400.css';
+import '@fontsource/geist/500.css';
+import '@fontsource/geist/600.css';
+import '@fontsource/geist-mono/400.css';
+import '@fontsource/geist-mono/500.css';
+import geist400 from '@fontsource/geist/files/geist-latin-400-normal.woff2?url';
+import '../styles/global.css';
+import TopBar from '../components/TopBar.astro';
+import Footer from '../components/Footer.astro';
+import profile from '../data/profile.json';
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string;
+  home?: boolean;
+  figures?: boolean;
+}
+const { title, description = profile.description, path = '', home = false, figures = false } = Astro.props;
+const fullTitle = title ? `${title} | ${profile.name}` : profile.name;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#FAFAFA" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0B0B0D" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={profile.name} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={geist400} as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="fade" aria-hidden="true"></div>
+    <TopBar path={path} home={home} />
+    <div class="col">
+      <slot />
+      <Footer />
+    </div>
+    {figures && (
+      <script>
+        const svgs = document.querySelectorAll<SVGSVGElement>('.fig-anim svg[data-fig]');
+        if (svgs.length && 'IntersectionObserver' in window) {
+          const io = new IntersectionObserver(
+            (entries) => entries.forEach((e) => {
+              const el = e.target as SVGSVGElement;
+              if (e.isIntersecting) el.unpauseAnimations(); else el.pauseAnimations();
+            }),
+            { threshold: 0.2 },
+          );
+          svgs.forEach((el) => {
+            try { el.pauseAnimations(); el.setCurrentTime(0); } catch (e) {}
+            io.observe(el);
+          });
+        }
+      </script>
+    )}
+  </body>
+</html>
