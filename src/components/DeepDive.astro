@@ -7,7 +7,7 @@ interface Props {
   description: string;
   path: string;
   back: string;
-  figure: [number, string];
+  figure?: [number, string];
   body: string[];
   pending: string;
   next?: { num: string; title: string; href: string };
@@ -26,17 +26,35 @@ const blocks = paras.flatMap((text, i) => [
   ...(body.length ? visuals.filter((v) => v.after === i) : []),
 ]);
 const delay = (i: number) => `--d:${(0.16 + i * 0.06).toFixed(2)}s`;
+// Body text: a paragraph starting with "## " is a section heading; [text](https://...) is an inline link.
+const heading = (t: string) => t.startsWith('## ');
+const inline = (t: string) => {
+  const parts: { text: string; href?: string }[] = [];
+  const re = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
+  let last = 0;
+  for (const m of t.matchAll(re)) {
+    if (m.index > last) parts.push({ text: t.slice(last, m.index) });
+    parts.push({ text: m[1], href: m[2] });
+    last = m.index + m[0].length;
+  }
+  if (last < t.length) parts.push({ text: t.slice(last) });
+  return parts;
+};
 ---
 <Base title={title} description={description} path={path} figures>
   <main>
     <article class="dd">
       <a class="dd-back nav-link" href={back}>cd ..</a>
       <h1 class="rise-dd" style="--d:.06s">{title}</h1>
-      <div class="dd-fig rise-dd" style="--d:.12s"><Figure kind={figure[0]} variant={figure[1]} /></div>
+      {figure && <div class="dd-fig rise-dd" style="--d:.12s"><Figure kind={figure[0]} variant={figure[1]} /></div>}
       <div class="dd-body">
         {blocks.map((b, i) =>
-          'text' in b ? (
-            <p class={`rise-dd${body.length ? '' : ' muted'}`} style={delay(i)}>{b.text}</p>
+          'text' in b && heading(b.text) ? (
+            <h2 class="dd-h rise-dd" style={delay(i)}>{b.text.slice(3)}</h2>
+          ) : 'text' in b ? (
+            <p class={`rise-dd${body.length ? '' : ' muted'}`} style={delay(i)}>
+              {inline(b.text).map((s) => (s.href ? <a href={s.href}>{s.text}</a> : s.text))}
+            </p>
           ) : 'figure' in b ? (
             <figure class="dd-inline rise-dd" style={delay(i)}>
               <div class="dd-inline-fig"><Figure kind={b.figure[0]} variant={b.figure[1]} /></div>
@@ -84,6 +102,12 @@ const delay = (i: number) => `--d:${(0.16 + i * 0.06).toFixed(2)}s`;
   }
   .dd-body { display: flex; flex-direction: column; gap: 22px; font-size: 18px; line-height: 1.7; }
   .dd-body p { margin: 0; }
+  .dd-body p a { color: var(--fg); text-underline-offset: 3px; }
+  .dd-body p a:hover { color: var(--accent); }
+  .dd-h {
+    font-size: clamp(20px, 2.6vw, 23px); line-height: 1.3; letter-spacing: -0.015em; font-weight: 600;
+    margin: 22px 0 -6px; text-wrap: balance;
+  }
   .dd-inline { margin: 12px 0; }
   .dd-inline-fig {
     height: clamp(140px, 24vw, 200px); border: 1px solid var(--line); border-radius: 12px;

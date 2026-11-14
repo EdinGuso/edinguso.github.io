@@ -9,9 +9,9 @@
 //   02 Setting up a team to develop with AI coding agents -> figure(2, 'a')
 //   03 ModuGPT and the GenAI tools for log analytics -> figure(3, 'a')
 //   04 Showing clinicians why a model flags a patient -> figure(4, 'd')
-//   /how-i-build deep dive hero -> figure(2, 'd')
 //   Inline in 01 -> figure(1, 'e') (draft list, expert review); inline in 03 -> figure(3, 'f') (prompt from parts) and figure(3, 'e') (SmartSearch split)
-// 2d and 4d were added on 2026-11-10 (review-and-correct; flag-then-explain). The other variants (1a, 1c, 2b, 2c, 3b, 3c, 4a, 4b, 4c) were explored and not chosen; kept for reference only.
+//   Inline in /how-i-build -> figure(2, 'e') (phases with questions before approval) and figure(2, 'f') (findings branch off into briefs)
+// 2d and 4d were added on 2026-11-10 (review-and-correct; flag-then-explain). 2d is not used: /how-i-build has no hero. The other variants (1a, 1c, 2b, 2c, 3b, 3c, 4a, 4b, 4c) were explored and not chosen; kept for reference only.
 
 const KEBAB = { strokeWidth: 'stroke-width', strokeDasharray: 'stroke-dasharray', strokeDashoffset: 'stroke-dashoffset' };
 function h(tag, props, ...children) {
@@ -283,6 +283,58 @@ export function figure(kind, variant, opts = {}) {
           an({ attributeName: 'opacity', values: '0;0;.8;.8;0', keyTimes: `0;${f(fa)};${f(fa + .03)};.94;1`, dur: D })));
         k.push(h('rect', { x: x + 1, y: 55, width: W - 6, height: 2.4, rx: 1.2, style: fg, opacity: reduce ? 1 : 0 },
           an({ attributeName: 'opacity', values: '0;0;1;1;0', keyTimes: `0;${f(fa + .05)};${f(fa + .08)};.94;1`, dur: D })));
+      });
+    } else if (v === '2e') {
+      // Four phases in a row. In each of the first three, a question travels up its arc to me (the lane at the
+      // top), the lane flashes where I answer, the answer comes back down and the phase is done. In the last
+      // phase the approval comes down from me as a straight line, and only then does the plan turn accent.
+      const D = 10, f = x => x.toFixed(3), xs = [16, 45, 74, 103], y = 54, L = 12, t = [.04, .23, .42, .62];
+      const top = y - 7, c = ((L - .25 * top) / .75).toFixed(2);
+      k.push(h('rect', { x: 6, y: L - .5, width: 108, height: 1, rx: .5, style: muted, opacity: .5 }));
+      xs.forEach((x, i) => {
+        k.push(h('rect', { x: x - 5, y: y - 5, width: 10, height: 10, rx: 2, style: { fill: 'none', stroke: 'var(--muted)' }, strokeWidth: .8 }));
+        if (i < 3) {
+          const d = `M${x - 4} ${top} C${x - 8} ${c} ${x + 8} ${c} ${x + 4} ${top}`, s = t[i];
+          k.push(h('path', { d, style: { fill: 'none', stroke: 'var(--muted)' }, strokeWidth: .7, opacity: .55 }));
+          if (!reduce) {
+            k.push(h('circle', { cx: 0, cy: 0, r: 2, style: acc, opacity: 0 },
+              an({ attributeName: 'opacity', values: '0;0;1;1;0;0', keyTimes: `0;${f(s)};${f(s + .01)};${f(s + .12)};${f(s + .13)};1`, dur: D }),
+              h('animateMotion', { path: d, dur: T(D), repeatCount: 'indefinite', keyPoints: '0;0;1;1', keyTimes: `0;${f(s + .01)};${f(s + .12)};1`, calcMode: 'linear' })));
+            k.push(h('rect', { x: x - 6, y: L - 1, width: 12, height: 2, rx: 1, style: acc, opacity: 0 },
+              an({ attributeName: 'opacity', values: '0;0;1;1;0;0', keyTimes: `0;${f(s + .055)};${f(s + .065)};${f(s + .08)};${f(s + .09)};1`, dur: D })));
+          }
+          k.push(h('rect', { x: x - 5, y: y - 5, width: 10, height: 10, rx: 2, style: fg, opacity: reduce ? 1 : 0 },
+            an({ attributeName: 'opacity', values: '0;0;1;1;0', keyTimes: `0;${f(s + .13)};${f(s + .14)};.94;1`, dur: D })));
+          k.push(h('line', { x1: x + 7, y1: y, x2: xs[i + 1] - 7, y2: y, pathLength: 1, style: { stroke: 'var(--fg)' }, strokeWidth: .9, strokeDasharray: 1, strokeDashoffset: reduce ? 0 : 1, opacity: .7 },
+            an({ attributeName: 'stroke-dashoffset', values: '1;1;0;0;1', keyTimes: `0;${f(s + .14)};${f(s + .19)};.94;1`, dur: D })));
+        } else {
+          const s = t[i];
+          k.push(h('line', { x1: x, y1: L + 1, x2: x, y2: y - 7, pathLength: 1, style: { stroke: 'var(--accent)' }, strokeWidth: .9, strokeDasharray: 1, strokeDashoffset: reduce ? 0 : 1 },
+            an({ attributeName: 'stroke-dashoffset', values: '1;1;0;0;1', keyTimes: `0;${f(s)};${f(s + .06)};.94;1`, dur: D })));
+          k.push(h('rect', { x: x - 5, y: y - 5, width: 10, height: 10, rx: 2, style: acc, opacity: reduce ? 1 : 0 },
+            an({ attributeName: 'opacity', values: '0;0;1;1;0', keyTimes: `0;${f(s + .07)};${f(s + .08)};.94;1`, dur: D })));
+        }
+      });
+    } else if (v === '2f') {
+      // The main task runs as one line to the end; two findings along the way branch off into brief cards
+      // for later, and the main line keeps going without a pause.
+      const D = 9, f = x => x.toFixed(3), x0 = 8, x1 = 104, y = 24, t0 = .04, t1 = .7;
+      const at = x => t0 + (x - x0) / (x1 - x0) * (t1 - t0);
+      k.push(h('rect', { x: x0, y: y - .8, width: reduce ? x1 - x0 : 0, height: 1.6, rx: .8, style: fg },
+        an({ attributeName: 'width', values: `0;0;${x1 - x0};${x1 - x0};0`, keyTimes: `0;${t0};${t1};.94;1`, dur: D })));
+      k.push(h('rect', { x: x1 + 3, y: y - 3.5, width: 7, height: 7, rx: 1.2, style: fg, opacity: reduce ? 1 : 0 },
+        an({ attributeName: 'opacity', values: '0;0;1;1;0', keyTimes: `0;${f(t1)};${f(t1 + .02)};.94;1`, dur: D })));
+      [36, 70].forEach(x => {
+        const s = at(x), cx = x + 10, cy = 50;
+        k.push(h('circle', { cx: x, cy: y, r: 2, style: acc, opacity: reduce ? 1 : 0 },
+          an({ attributeName: 'opacity', values: '0;0;1;1;0', keyTimes: `0;${f(s)};${f(s + .01)};.94;1`, dur: D })));
+        k.push(h('line', { x1: x, y1: y + 2.5, x2: cx, y2: cy - 6.5, pathLength: 1, style: { stroke: 'var(--accent)' }, strokeWidth: .8, strokeDasharray: 1, strokeDashoffset: reduce ? 0 : 1 },
+          an({ attributeName: 'stroke-dashoffset', values: '1;1;0;0;1', keyTimes: `0;${f(s + .01)};${f(s + .06)};.94;1`, dur: D })));
+        const card = [h('rect', { x: cx - 10, y: cy - 6, width: 20, height: 13, rx: 1.8, style: { fill: 'none', stroke: 'var(--muted)' }, strokeWidth: .7 }),
+          h('rect', { x: cx - 7, y: cy - 2.6, width: 12, height: 1.6, rx: .8, style: fg, opacity: .8 }),
+          h('rect', { x: cx - 7, y: cy + 1.4, width: 8, height: 1.6, rx: .8, style: muted, opacity: .8 })];
+        k.push(h('g', { opacity: reduce ? 1 : 0 }, ...card,
+          an({ attributeName: 'opacity', values: '0;0;1;1;0', keyTimes: `0;${f(s + .06)};${f(s + .08)};.94;1`, dur: D })));
       });
     } else if (v === '4c') {
       const tg = [[44, 20], [62, 20], [44, 38], [62, 38]], st = [[30, 8], [80, 14], [36, 50], [74, 46]];

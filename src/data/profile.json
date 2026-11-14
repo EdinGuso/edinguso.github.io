@@ -24,22 +24,42 @@
       "  Run tests/eval",
       "  The new threshold drops valid matches. Revert it and rerun?"
     ],
-    "body": [],
-    "evidence": [
+    "body": [
+      "I use AI coding agents every day, at work and in personal projects. Writing code has become cheap, so most of my effort goes into the parts an agent cannot decide for me. That means deciding what the task is and what is in scope, and checking that the result is right. These are the habits that have helped me most so far.",
+      "## The agent asks before it works",
+      "Most of my agentic tasks start with /clarify-task, a skill I wrote and use at work and in all my personal projects. It takes the agent through four phases: clarify the request, gather context, draft a plan, and wait for my approval. In every phase, the agent has to ask me about anything that is not clear. It is not allowed to guess.",
+      "The questions take a few minutes, but they save more time than they cost. I no longer worry whether my prompt covered every detail, because the agent finds the gaps. It also learns what I am trying to achieve, not just what I typed. Since the result already follows my preferences, I spend much less time reviewing and correcting it. This post was planned the same way.",
+      "## Public skills, with my own layer on top",
+      "I rarely start a setup from nothing. Widely used open-source skills already capture good habits. Two I use are the [Karpathy guidelines](https://github.com/multica-ai/andrej-karpathy-skills) (think before coding, keep it simple, change only what was asked) and [Ponytail](https://github.com/DietrichGebert/ponytail) (write the least code the task needs). I adapt them to each project.",
+      "On top of them, I add my own layer. It holds my coding and testing guidelines, the project's conventions, structure and style guides, and the style of the text the agent writes for others, such as docs, commit messages and PR descriptions. It also says when the agent should plan, test, commit or stop and ask. The public skills give me a tested baseline, and my layer makes the agent work the way I would.",
+      "## One task at a time",
+      "While exploring or implementing, an agent often finds things I had not considered. It might be a bug next to the code it is changing, an outdated test, or a rule that no longer makes sense. It is tempting to ask for a fix right away. However, every detour slows the task down and fills the context with unrelated work, and the agent's later work gets worse. The diff also mixes unrelated changes, so it is harder to review, and I lose my own focus.",
+      "So I keep each task to its scope. I wrote a skill for this: it notes each finding along the way and turns it into a short brief. Another agent can start from that brief later, without reading the original conversation. Nothing gets lost, and the current task ships first.",
+      "## Checking the work",
+      "Before I review a change, an agent reviews it. It catches the easy issues, such as bugs, missed edge cases or broken conventions. It does not have the context of the session that wrote the code, so it sees things the first agent missed. It also checks the change against the project's skills and rules. That way my own review can focus on design and logic. I read every diff myself before it merges, and I review better when the diff is small, which is another reason to keep tasks scoped.",
+      "Review alone is not enough, though. Every change comes with new or updated tests that must pass, and CI runs them on every change. The tests show that a change works as intended, and they catch side effects that are easy to miss in a diff.",
+      "## Learning from corrections",
+      "Some tasks need a lot of correcting before they are done. When that happens, I run a skill at the end of the session that goes through every disagreement we had. For each one, it notes what it was about, why it happened, and whether it points to a gap in a skill, a workflow or the project's instructions. Then it makes those changes, so I do not have to make the same correction again.",
+      "These fixes go into shared files, not the agent's memory. Memory stays local to me, so it does not help anyone else working on the same code. I also have less control over when memory is updated and what goes into it. A well-defined skill or project rule is clear, and it applies to every contributor and every agent.",
+      "## Keeping the context clean",
+      "Skills, plugins and workflows pile up quickly. Everything that loads by default takes space in the context window, whether the task needs it or not. Every few weeks, I check what actually loads with the agent's built-in tools (in Claude Code, /context, /doctor and /skill-doctor) and clean up. I turn off unused plugins and skills, merge overlapping ones, shorten long instructions without losing rules, and remove rules that no longer apply. A smaller setup leaves more of the context for the task itself."
+    ],
+    "visuals": [
       {
-        "text": "Case study 02: Setting up a team to develop with AI coding agents",
-        "label": "Read",
-        "href": "/selected-work/02/"
+        "after": 3,
+        "figure": [
+          2,
+          "e"
+        ],
+        "caption": "In each phase the agent asks about anything unclear, and the work starts only after I approve the plan."
       },
       {
-        "text": "Gamified calisthenics workout app, built entirely with Claude Code",
-        "label": "GitHub",
-        "href": "https://github.com/EdinGuso/calisthenics-workouts"
-      },
-      {
-        "text": "\"First Steps with AI Tools\", talk for teachers",
-        "label": "Slides",
-        "href": "https://github.com/EdinGuso/First-Steps-with-AI-Tools"
+        "after": 9,
+        "figure": [
+          2,
+          "f"
+        ],
+        "caption": "Findings outside the task become briefs for later, and the task itself keeps going to the end."
       }
     ]
   },
