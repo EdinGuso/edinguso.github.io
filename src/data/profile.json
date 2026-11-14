@@ -11,8 +11,8 @@
     "cv": "/cv/Edin-Guso-CV.pdf"
   },
   "intro": {
-    "lead": "I am an AI engineer, and for the past two years I have been building GenAI and machine learning systems that run in production.",
-    "rest": "I designed and built an LLM system that maps free text to a vocabulary of over a million medical codes, with evaluation behind every change, and I set up how my team develops with AI coding agents. Before that, I built an LLM framework and the GenAI tools that shipped on it, which became my Master's thesis at EPFL."
+    "lead": "I am an AI engineer, and for the past three years I have been building GenAI and machine learning systems that run in production.",
+    "rest": "I take a system from first prototype to tested, configurable components, and I build the evaluation that shows whether each change helps. I work directly with clients and domain experts on the results. Day to day I build with AI coding agents, and I set up how my team works with them."
   },
   "howIBuild": {
     "title": "How I work with AI coding agents",
