@@ -8,7 +8,7 @@
     "site": "https://edinguso.github.io/",
     "linkedin": "https://www.linkedin.com/in/edinguso/",
     "github": "https://github.com/EdinGuso",
-    "cv": "/cv/public.pdf"
+    "cv": "/cv/Edin-Guso-CV.pdf"
   },
   "intro": {
     "lead": "I am an AI engineer, and for the past two years I have been building GenAI and machine learning systems that run in production.",
@@ -57,8 +57,31 @@
         "To find patients in health records, you first need to know which codes stand for a disease, a symptom or a treatment. Across the coding systems we work with there are over a million diagnosis, procedure and drug codes, and building these lists by hand was slow and hard to repeat.",
         "I designed and built a GenAI system that drafts these code lists, so experts review a draft instead of starting from nothing. It was first used on a real programme within two months of starting, and since then I have kept improving it for several clients and disease programmes, until it became a tested part of our main platform.",
         "At the start there was no measure of correctness, so every change was a guess. I introduced evaluation against expert-curated golden mappings, with precision and recall per concept, so that prompt and model changes could be compared on evidence. Each matching rule can be switched off, so its contribution can be measured on its own.",
-        "Scale was the other problem. The first version ran out of memory after a few thousand codes, so it could only work on small subsets. I rewrote the heavy parts so the system runs on the full set of over a million codes, and checked that in a full-scale simulation before relying on it.",
+        "Scale was the other problem. A full run compares every concept with every code, which comes to over 100 million concept-code pairs for one programme. The first version ran out of memory after a few thousand codes, so it could only work on small subsets. I rewrote the heavy parts so the system runs on the full set of over a million codes, and checked that in a full-scale simulation before relying on it.",
         "When I moved the system into the platform, I gave it typed configuration, so bad settings fail at start-up, over 1,000 unit tests and an offline mode, so CI runs it end to end without paying for API calls. I also made it serve different clients and coding systems through configuration instead of separate code."
+      ],
+      "visuals": [
+        {
+          "after": 1,
+          "figure": [
+            1,
+            "e"
+          ],
+          "caption": "The system drafts each code list, and experts review the draft instead of starting from nothing."
+        },
+        {
+          "after": 4,
+          "stats": [
+            {
+              "value": "100M+",
+              "label": "concept-code pairs in one full run"
+            },
+            {
+              "value": "2 months",
+              "label": "to first use on a real programme"
+            }
+          ]
+        }
       ]
     },
     {
@@ -81,10 +104,45 @@
       ],
       "body": [
         "Logmind's platform turns large volumes of logs into insights: the log patterns its models flag as critical. However, an insight still looks like a raw log line, so it is hard to read without knowing the system that wrote it. To look further, users then had to search individual logs with Elasticsearch queries, a language most of them did not know.",
-        "I built ModuGPT, a Python framework for LLM tools, and the three tools that shipped on it. I wrote my own instead of using LangChain or LlamaIndex, because each tool needed close control over its calls and fewer layers to debug. Every tool runs the same steps: check the input, build the prompt, call the model, then check and format the output. Prompts are put together from reusable parts such as a persona, rules, a database schema or examples, so a new tool starts from tested pieces instead of a blank prompt. When the model cannot do a task, it answers with a fixed keyword, and the tool returns a clear error instead of a wrong result.",
-        "Insight-to-Text explains an insight in plain language and suggests what to check. Users found openings like \"This log indicates that...\" robotic, so the model always starts that way and the tool removes the phrase, which also gives a simple check that the output has the expected form. Text-to-ES turns a question into an Elasticsearch query, using the index schema and examples chosen by similarity to the question. SmartSearch handles questions that mix exact filters with a topic, such as error logs from today related to network problems. It splits the question with a chain of model calls, sends the exact part through Text-to-ES and the topic through semantic search over log patterns, and combines the two. It also tells the user how it read the question.",
-        "I compared each tool with a control version on 100 examples from five kinds of logs. Where a correct answer exists, I ran the generated query and the expected one and compared the logs they return. Text-to-ES got all 100 queries right, against 13 for a plain prompt. For SmartSearch, the chain raised the score for the exact part from 0.22 to 0.67 compared with a single well-engineered call. Explanations have no single right answer, so an LLM judge from a different model scored each output in its own prompt, ten times, to limit known judge biases, and the tool won in 95 of 100 cases. The test set had no multi-level aggregations, and those are still harder.",
+        "I built ModuGPT, a Python framework for LLM tools, and the three tools that shipped on it. I wrote my own instead of using LangChain or LlamaIndex, because each tool needed close control over its calls and fewer layers to debug.",
+        "Every tool runs the same steps: check the input, build the prompt, call the model, then check and format the output. Prompts are built from reusable parts such as a persona, rules, a database schema or examples, so a new tool starts from tested pieces. When the model cannot do a task, it answers with a fixed keyword, and the tool returns a clear error instead of a wrong result.",
+        "Insight-to-Text explains an insight in plain language and suggests what to check. Users found openings like \"This log indicates that...\" robotic, so the model always starts that way and the tool removes the phrase, which also confirms that the output has the expected form.",
+        "Text-to-ES turns a question into an Elasticsearch query, using the index schema and examples chosen by similarity to the question.",
+        "SmartSearch handles questions that mix exact filters with a topic, such as error logs from today related to network problems. A chain of model calls splits the question, sends the exact part through Text-to-ES and the topic through semantic search over log patterns, then combines the two and tells the user how it read the question.",
+        "I compared each tool with a control version on 100 examples from five kinds of logs. Where a correct answer exists, I ran the generated query and the expected one and compared the logs they return. Text-to-ES got all 100 queries right, against 13 for a plain prompt. For SmartSearch, the chain raised the score for the exact part from 0.22 to 0.67 compared with a single well-engineered call.",
+        "Explanations have no single right answer, so an LLM judge from a different model scored each output in its own prompt, ten times, to limit known judge biases, and the tool won in 95 of 100 cases. The test set had no multi-level aggregations, and those are still harder.",
         "I started with small self-hosted open models, which were too weak for query generation, while larger ones would have needed expensive cloud GPUs. We moved to the OpenAI API, and later to a cheaper model for all tools except Text-to-ES. All of Logmind's GenAI tools were built on ModuGPT and shipped to customers, and the work became my Master's thesis at EPFL. The core framework is public, with the proprietary prompts and tools removed."
+      ],
+      "visuals": [
+        {
+          "after": 2,
+          "figure": [
+            3,
+            "f"
+          ],
+          "caption": "Prompts are put together from reusable parts, so a new tool starts from tested pieces."
+        },
+        {
+          "after": 5,
+          "figure": [
+            3,
+            "e"
+          ],
+          "caption": "SmartSearch splits a question into an exact filter and a topic, searches each one its own way and combines the results."
+        },
+        {
+          "after": 8,
+          "stats": [
+            {
+              "value": "100/100",
+              "label": "Text-to-ES queries correct, against 13 for a plain prompt"
+            },
+            {
+              "value": "95/100",
+              "label": "explanations preferred by the LLM judge"
+            }
+          ]
+        }
       ],
       "links": [
         {
@@ -137,7 +195,7 @@
       "line": "Generates CVs, cover letters and web text from one structured profile"
     },
     {
-      "title": "Discord bot for a 60+ member gaming team, 2020-2025",
+      "title": "Discord bot for a 60+ member team",
       "line": "Python. Sign-ups, reminders and monthly scores, with role-based access control on every command and button"
     }
   ],
@@ -156,11 +214,11 @@
     },
     {
       "dates": "2019-07 to 2019-08",
-      "text": "UT Austin, summer internship"
+      "text": "UT Austin, Summer Intern"
     },
     {
       "dates": "2016-09 to 2021-06",
-      "text": "Sabancı University, B.Sc. double major, Istanbul"
+      "text": "Sabancı University, B.Sc. Computer Science and Mechatronics"
     }
   ],
   "outsideWork": [

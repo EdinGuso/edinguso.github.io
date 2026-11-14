@@ -12,9 +12,20 @@ interface Props {
   pending: string;
   next?: { num: string; title: string; href: string };
   links?: { label: string; href: string }[];
+  visuals?: Visual[];
 }
-const { title, description, path, back, figure, body, pending, next, links = [] } = Astro.props;
+// Inline visuals sit after the body paragraph with index `after`: a figure with a caption, or a strip of result callouts.
+type Visual =
+  | { after: number; figure: [number, string]; caption: string }
+  | { after: number; stats: { value: string; label: string }[] };
+const { title, description, path, back, figure, body, pending, next, links = [], visuals = [] } = Astro.props;
 const paras = body.length ? body : [pending];
+// Each block (paragraph or visual) rises in order after the hero.
+const blocks = paras.flatMap((text, i) => [
+  { text },
+  ...(body.length ? visuals.filter((v) => v.after === i) : []),
+]);
+const delay = (i: number) => `--d:${(0.16 + i * 0.06).toFixed(2)}s`;
 ---
 <Base title={title} description={description} path={path} figures>
   <main>
@@ -23,12 +34,25 @@ const paras = body.length ? body : [pending];
       <h1 class="rise-dd" style="--d:.06s">{title}</h1>
       <div class="dd-fig rise-dd" style="--d:.12s"><Figure kind={figure[0]} variant={figure[1]} /></div>
       <div class="dd-body">
-        {paras.map((p, i) => (
-          <p class={`rise-dd${body.length ? '' : ' muted'}`} style={`--d:${(0.16 + i * 0.06).toFixed(2)}s`}>{p}</p>
-        ))}
+        {blocks.map((b, i) =>
+          'text' in b ? (
+            <p class={`rise-dd${body.length ? '' : ' muted'}`} style={delay(i)}>{b.text}</p>
+          ) : 'figure' in b ? (
+            <figure class="dd-inline rise-dd" style={delay(i)}>
+              <div class="dd-inline-fig"><Figure kind={b.figure[0]} variant={b.figure[1]} /></div>
+              <figcaption>{b.caption}</figcaption>
+            </figure>
+          ) : (
+            <dl class="dd-stats rise-dd" style={delay(i)}>
+              {b.stats.map((s) => (
+                <div class="dd-stat"><dt>{s.value}</dt><dd>{s.label}</dd></div>
+              ))}
+            </dl>
+          )
+        )}
       </div>
       {body.length > 0 && links.length > 0 && (
-        <ul class="dd-links rise-dd" style={`--d:${(0.16 + paras.length * 0.06).toFixed(2)}s`}>
+        <ul class="dd-links rise-dd" style={delay(blocks.length)}>
           {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
         </ul>
       )}
@@ -60,6 +84,19 @@ const paras = body.length ? body : [pending];
   }
   .dd-body { display: flex; flex-direction: column; gap: 22px; font-size: 18px; line-height: 1.7; }
   .dd-body p { margin: 0; }
+  .dd-inline { margin: 12px 0; }
+  .dd-inline-fig {
+    height: clamp(140px, 24vw, 200px); border: 1px solid var(--line); border-radius: 12px;
+    background: var(--soft); padding: 18px 22px;
+  }
+  .dd-inline figcaption { margin-top: 10px; font-size: 14px; line-height: 1.5; color: var(--muted); }
+  .dd-stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 20px 28px;
+    margin: 12px 0; padding: 20px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  .dd-stat { display: flex; flex-direction: column; gap: 4px; }
+  .dd-stat dt { font-size: clamp(26px, 3.6vw, 32px); line-height: 1.1; font-weight: 600; letter-spacing: -0.02em; }
+  .dd-stat dd { margin: 0; font-size: 14px; line-height: 1.45; color: var(--muted); }
   .dd-links {
     list-style: none; margin: 32px 0 0; padding: 0;
     display: flex; flex-wrap: wrap; gap: 8px 24px; font: 14px var(--mono);

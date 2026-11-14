@@ -10,6 +10,7 @@
 //   03 ModuGPT and the GenAI tools for log analytics -> figure(3, 'a')
 //   04 Showing clinicians why a model flags a patient -> figure(4, 'd')
 //   /how-i-build deep dive hero -> figure(2, 'd')
+//   Inline in 01 -> figure(1, 'e') (draft list, expert review); inline in 03 -> figure(3, 'f') (prompt from parts) and figure(3, 'e') (SmartSearch split)
 // 2d and 4d were added on 2026-11-10 (review-and-correct; flag-then-explain). The other variants (1a, 1c, 2b, 2c, 3b, 3c, 4a, 4b, 4c) were explored and not chosen; kept for reference only.
 
 const KEBAB = { strokeWidth: 'stroke-width', strokeDasharray: 'stroke-dasharray', strokeDashoffset: 'stroke-dashoffset' };
@@ -207,6 +208,81 @@ export function figure(kind, variant, opts = {}) {
         const y = 16 + i * 10, a = (.28 + i * .07).toFixed(2), b = (.36 + i * .07).toFixed(2);
         k.push(h('rect', { x: 64, y: y - 1.6, width: reduce ? w : 0, height: 3.2, rx: 1, style: i < 2 ? acc : fg, opacity: i < 2 ? 1 : .7 },
           an({ attributeName: 'width', values: `0;0;${w};${w};0`, keyTimes: `0;${a};${b};.9;1`, dur: 7 })));
+      });
+    } else if (v === '1e') {
+      // A free-text concept on the left drafts a code list; an expert reviews it row by row, keeps four and drops one.
+      const ws = [40, 28, 46, 34, 24], ys = [10, 23, 36, 49, 62], f = x => x.toFixed(3), D = 9;
+      const a = ws.map((_, i) => .14 + i * .05), r = [.46, .52, .58, .64, .7];
+      k.push(h('rect', { x: 6, y: 34.5, width: 26, height: 3, rx: 1.5, style: fg }));
+      // One mapping line from the concept to each drafted code; the dropped code's line fades with it.
+      ys.forEach((y, i) => {
+        const drop = i === 2, s0 = f(a[i] - .04), s1 = f(a[i] + .01);
+        k.push(h('line', { x1: 35, y1: 36, x2: 48.5, y2: y, pathLength: 1, style: { stroke: 'var(--accent)' }, strokeWidth: .8, strokeDasharray: 1, strokeDashoffset: reduce ? 0 : 1, opacity: reduce && drop ? .2 : .9 },
+          an({ attributeName: 'stroke-dashoffset', values: '1;1;0;0;1', keyTimes: `0;${s0};${s1};.94;1`, dur: D }),
+          drop ? an({ attributeName: 'opacity', values: '.9;.9;.2;.2;.9', keyTimes: `0;${f(r[i])};${f(r[i] + .03)};.94;1`, dur: D }) : null));
+      });
+      ws.forEach((w, i) => {
+        const y = ys[i], drop = i === 2;
+        k.push(h('circle', { cx: 52, cy: y, r: 1.6, style: muted, opacity: reduce ? (drop ? .2 : .9) : 0 },
+          an({ attributeName: 'opacity', values: drop ? '0;0;.9;.9;.2;.2;0' : '0;0;.9;.9;0', keyTimes: drop ? `0;${f(a[i])};${f(a[i] + .04)};${f(r[i])};${f(r[i] + .03)};.94;1` : `0;${f(a[i])};${f(a[i] + .04)};.94;1`, dur: D })));
+        k.push(h('rect', { x: 57, y: y - 1.2, width: reduce ? w : 0, height: 2.4, rx: 1.2, style: muted, opacity: reduce ? (drop ? .2 : 0) : .6 },
+          an({ attributeName: 'width', values: `0;0;${w};${w};0`, keyTimes: `0;${f(a[i])};${f(a[i] + .05)};.94;1`, dur: D }),
+          drop ? an({ attributeName: 'opacity', values: '.6;.6;.2;.2;.6', keyTimes: `0;${f(r[i])};${f(r[i] + .03)};.94;1`, dur: D }) : null));
+        if (!drop) {
+          k.push(h('rect', { x: 57, y: y - 1.2, width: w, height: 2.4, rx: 1.2, style: fg, opacity: reduce ? 1 : 0 },
+            an({ attributeName: 'opacity', values: '0;0;1;1;0', keyTimes: `0;${f(r[i])};${f(r[i] + .02)};.94;1`, dur: D })));
+          k.push(h('rect', { x: 108, y: y - 2.5, width: 5, height: 5, rx: 1, style: fg, opacity: reduce ? 1 : 0 },
+            an({ attributeName: 'opacity', values: '0;0;1;1;0', keyTimes: `0;${f(r[i])};${f(r[i] + .02)};.94;1`, dur: D })));
+        } else {
+          k.push(h('rect', { x: 108, y: y - 2.5, width: 5, height: 5, rx: 1, style: { fill: 'none', stroke: 'var(--accent)' }, strokeWidth: .8, opacity: reduce ? 1 : 0 },
+            an({ attributeName: 'opacity', values: '0;0;1;1;0', keyTimes: `0;${f(r[i])};${f(r[i] + .02)};.94;1`, dur: D })));
+        }
+      });
+      if (!reduce) k.push(h('rect', { x: 106, y: ys[0] - 4.5, width: 9, height: 9, rx: 1.6, style: { fill: 'none', stroke: 'var(--accent)' }, strokeWidth: 1, opacity: 0 },
+        an({ attributeName: 'opacity', values: '0;0;1;1;0;0', keyTimes: '0;.42;.44;.74;.76;1', dur: D }),
+        an({ attributeName: 'y', values: ys.map(y => y - 4.5).concat([ys[4] - 4.5]).join(';').replace(/^/, `${ys[0] - 4.5};`), keyTimes: `0;${r.map(f).join(';')};1`, dur: D })));
+    } else if (v === '3e') {
+      // A question splits into an exact filter (structured) and a topic (semantic); both searches meet in one result.
+      const D = 8, draw = (x1, y1, x2, y2, a, b, stroke) => h('line', { x1, y1, x2, y2, pathLength: 1, style: { stroke }, strokeWidth: .8, strokeDasharray: 1, strokeDashoffset: reduce ? 0 : 1 },
+        an({ attributeName: 'stroke-dashoffset', values: '1;1;0;0;1', keyTimes: `0;${a};${b};.92;1`, dur: D }));
+      const show = (el, a, b) => { el.push(an({ attributeName: 'opacity', values: '0;0;1;1;0', keyTimes: `0;${a};${b};.92;1`, dur: D })); return el; };
+      k.push(h('rect', { x: 4, y: 34.5, width: 26, height: 3, rx: 1.5, style: fg }));
+      k.push(draw(32, 36, 44, 18, .06, .16, 'var(--accent)'));
+      k.push(draw(32, 36, 44, 54, .06, .16, 'var(--muted)'));
+      [0, 1, 2].forEach(j => {
+        const a = (.18 + j * .04).toFixed(2), b = (+a + .03).toFixed(2);
+        k.push(h('rect', { x: 48 + j * 8, y: 15, width: 6, height: 6, rx: 1, style: fg, opacity: reduce ? 1 : 0 }, ...show([], a, b)));
+      });
+      [[50, 50], [56, 57], [62, 51], [58, 46], [66, 57], [70, 49]].forEach(([cx, cy], j) => {
+        const a = (.18 + j * .03).toFixed(2), b = (+a + .03).toFixed(2), hot = j === 3;
+        k.push(h('circle', { cx, cy, r: hot ? 2.2 : 1.6, style: hot ? acc : muted, opacity: reduce ? 1 : 0 }, ...show([], a, b)));
+      });
+      k.push(draw(76, 18, 88, 36, .4, .5, 'var(--accent)'));
+      k.push(draw(76, 54, 88, 36, .4, .5, 'var(--muted)'));
+      [[22, 30, 1], [16, 36, 0], [20, 42, 0]].forEach(([w, y, hot], j) => {
+        const a = (.52 + j * .04).toFixed(2), b = (+a + .03).toFixed(2);
+        k.push(h('rect', { x: 92, y: y - 1.2, width: w, height: 2.4, rx: 1.2, style: hot ? acc : fg, opacity: reduce ? 1 : 0 }, ...show([], a, b)));
+      });
+    } else if (v === '3f') {
+      // Reusable prompt parts on the left assemble into one tool's prompt, then the same parts build a second tool's.
+      const D = 9, f = x => x.toFixed(3), W = 24, H = 7;
+      const parts = [{ style: fg, op: .85 }, { style: muted, op: .8 }, { style: acc, op: 1 }, { style: fg, op: .45 }];
+      const sy = [10, 24, 38, 52], ty = [14, 24, 34];
+      parts.forEach((p, j) => k.push(h('rect', { x: 8, y: sy[j], width: W, height: H, rx: 1.5, style: p.style, opacity: p.op })));
+      const tools = [{ x: 52, use: [0, 1, 2], t0: .06 }, { x: 88, use: [0, 1, 3], t0: .46 }];
+      tools.forEach(({ x, use, t0 }) => {
+        use.forEach((j, n) => {
+          const s0 = t0 + n * .08, s1 = s0 + .08, p = parts[j];
+          k.push(h('rect', { x: reduce ? x : 8, y: reduce ? ty[n] : sy[j], width: W, height: H, rx: 1.5, style: p.style, opacity: reduce ? p.op : 0 },
+            an({ attributeName: 'opacity', values: `0;0;${p.op};${p.op};0`, keyTimes: `0;${f(s0)};${f(s0 + .01)};.94;1`, dur: D }),
+            an({ attributeName: 'x', values: `8;8;${x};${x};8`, keyTimes: `0;${f(s0)};${f(s1)};.94;1`, dur: D, calcMode: 'spline', keySplines: sp4 }),
+            an({ attributeName: 'y', values: `${sy[j]};${sy[j]};${ty[n]};${ty[n]};${sy[j]}`, keyTimes: `0;${f(s0)};${f(s1)};.94;1`, dur: D, calcMode: 'spline', keySplines: sp4 })));
+        });
+        const fa = t0 + .28;
+        k.push(h('rect', { x: x - 3, y: 10.5, width: W + 6, height: 34, rx: 2.5, style: { fill: 'none', stroke: 'var(--muted)' }, strokeWidth: .6, opacity: reduce ? .8 : 0 },
+          an({ attributeName: 'opacity', values: '0;0;.8;.8;0', keyTimes: `0;${f(fa)};${f(fa + .03)};.94;1`, dur: D })));
+        k.push(h('rect', { x: x + 1, y: 55, width: W - 6, height: 2.4, rx: 1.2, style: fg, opacity: reduce ? 1 : 0 },
+          an({ attributeName: 'opacity', values: '0;0;1;1;0', keyTimes: `0;${f(fa + .05)};${f(fa + .08)};.94;1`, dur: D })));
       });
     } else if (v === '4c') {
       const tg = [[44, 20], [62, 20], [44, 38], [62, 38]], st = [[30, 8], [80, 14], [36, 50], [74, 46]];

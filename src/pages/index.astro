@@ -97,6 +97,51 @@ const trace = p.howIBuild.trace.map((text, i) => {
   </main>
 </Base>
 
+<script>
+  // The trace types once on load. Once it has finished it holds, fades out and types again, and it starts over
+  // whenever the card comes back into view. Paused while off-screen or in a background tab. Reduced motion: static.
+  const HOLD = 8000, FADE = 400;
+  const trace = document.querySelector<HTMLElement>('#how-i-build .trace');
+  if (trace && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const lines = [...trace.querySelectorAll<HTMLElement>('.tl')];
+    const secs = (v: string) => parseFloat(v) || 0;
+    const length = () => Math.max(...lines.map((l) => {
+      const cs = getComputedStyle(l);
+      return secs(cs.animationDelay) + secs(cs.animationDuration);
+    })) * 1000;
+    let timer = 0, visible = true, left = false, due = false;
+    const restart = () => {
+      clearTimeout(timer);
+      trace.classList.add('tr-out');
+      timer = window.setTimeout(() => {
+        lines.forEach((l) => { l.style.animationName = 'none'; });
+        void trace.offsetWidth;
+        lines.forEach((l) => { l.style.animationName = ''; });
+        trace.classList.remove('tr-out');
+        schedule();
+      }, FADE);
+    };
+    const schedule = () => {
+      clearTimeout(timer);
+      due = false;
+      timer = window.setTimeout(() => {
+        if (visible && !document.hidden) restart(); else due = true;
+      }, length() + HOLD);
+    };
+    schedule();
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => {
+        visible = e.isIntersecting;
+        if (!visible) { left = true; clearTimeout(timer); return; }
+        if (left || due) { left = false; restart(); }
+      }, { threshold: 0.3 }).observe(trace);
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && visible && due) restart();
+    });
+  }
+</script>
+
 <style>
   .kicker { margin-top: clamp(48px, 10vw, 96px); font-size: 13px; }
   .intro {
@@ -116,6 +161,8 @@ const trace = p.howIBuild.trace.map((text, i) => {
     display: flex; flex-direction: column; gap: 4px; background: var(--soft); padding: 18px 20px;
     font: 13px/1.6 var(--mono); color: var(--muted);
   }
+  .trace { transition: opacity 0.4s; }
+  .trace.tr-out { opacity: 0; }
   .tl { white-space: pre-wrap; animation-name: type; animation-fill-mode: both; }
   /* Wrapped lines cannot be typed in cleanly, so on narrow screens each line fades in instead. */
   @keyframes line-in { from { opacity: 0; } to { opacity: 1; } }
