@@ -131,7 +131,7 @@
         "SmartSearch handles questions that mix exact filters with a topic, such as error logs from today related to network problems. A chain of model calls splits the question, sends the exact part through Text-to-ES and the topic through semantic search over log patterns, then combines the two and tells the user how it read the question.",
         "I compared each tool with a control version on 100 examples from five kinds of logs. Where a correct answer exists, I ran the generated query and the expected one and compared the logs they return. Text-to-ES got all 100 queries right, against 13 for a plain prompt. For SmartSearch, the chain raised the score for the exact part from 0.22 to 0.67 compared with a single well-engineered call.",
         "Explanations have no single right answer, so an LLM judge from a different model scored each output in its own prompt, ten times, to limit known judge biases, and the tool won in 95 of 100 cases. The test set had no multi-level aggregations, and those are still harder.",
-        "I started with small self-hosted open models, which were too weak for query generation, while larger ones would have needed expensive cloud GPUs. We moved to the OpenAI API, and later to a cheaper model for all tools except Text-to-ES. All of Logmind's GenAI tools were built on ModuGPT and shipped to customers, and the work became my Master's thesis at EPFL. The core framework is public, with the proprietary prompts and tools removed."
+        "I started with small self-hosted open models, which were too weak for query generation, while larger ones would have needed expensive cloud GPUs. We moved to the OpenAI API, and later to a cheaper model for all tools except Text-to-ES. All of Logmind's GenAI tools were built on ModuGPT and shipped to customers, and the work became my [Master's thesis](https://github.com/EdinGuso/master-project) at EPFL. The [core framework](https://bitbucket.org/ketjuni2/modugpt_public/src/main/) is public, with the proprietary prompts and tools removed."
       ],
       "visuals": [
         {
@@ -162,16 +162,6 @@
               "label": "explanations preferred by the LLM judge"
             }
           ]
-        }
-      ],
-      "links": [
-        {
-          "label": "Thesis",
-          "href": "https://github.com/EdinGuso/master-project"
-        },
-        {
-          "label": "ModuGPT core framework",
-          "href": "https://bitbucket.org/ketjuni2/modugpt_public/src/main/"
         }
       ]
     },

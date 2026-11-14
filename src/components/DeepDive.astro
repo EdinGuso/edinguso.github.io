@@ -11,14 +11,13 @@ interface Props {
   body: string[];
   pending: string;
   next?: { num: string; title: string; href: string };
-  links?: { label: string; href: string }[];
   visuals?: Visual[];
 }
 // Inline visuals sit after the body paragraph with index `after`: a figure with a caption, or a strip of result callouts.
 type Visual =
   | { after: number; figure: [number, string]; caption: string }
   | { after: number; stats: { value: string; label: string }[] };
-const { title, description, path, back, figure, body, pending, next, links = [], visuals = [] } = Astro.props;
+const { title, description, path, back, figure, body, pending, next, visuals = [] } = Astro.props;
 const paras = body.length ? body : [pending];
 // Each block (paragraph or visual) rises in order after the hero.
 const blocks = paras.flatMap((text, i) => [
@@ -69,11 +68,6 @@ const inline = (t: string) => {
           )
         )}
       </div>
-      {body.length > 0 && links.length > 0 && (
-        <ul class="dd-links rise-dd" style={delay(blocks.length)}>
-          {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-        </ul>
-      )}
       <slot />
       <nav class="dd-nav" aria-label="Page navigation">
         <a class="dd-back nav-link" href={back}>cd ..</a>
@@ -121,12 +115,6 @@ const inline = (t: string) => {
   .dd-stat { display: flex; flex-direction: column; gap: 4px; }
   .dd-stat dt { font-size: clamp(26px, 3.6vw, 32px); line-height: 1.1; font-weight: 600; letter-spacing: -0.02em; }
   .dd-stat dd { margin: 0; font-size: 14px; line-height: 1.45; color: var(--muted); }
-  .dd-links {
-    list-style: none; margin: 32px 0 0; padding: 0;
-    display: flex; flex-wrap: wrap; gap: 8px 24px; font: 14px var(--mono);
-  }
-  .dd-links a { color: var(--fg); }
-  .dd-links a:hover { color: var(--accent); }
   .dd-nav {
     margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
     display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;
